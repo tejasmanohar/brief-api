@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+    <body>
+
+        <script type="text/javascript">
+
+		    var token = null;
+
+	        var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
+
+	        var socket = new WS('ws://' + location.host + '/api/v1/conversation/websocket');
+
+            var receiveEvent = function(event) {
+                console.log(event);
+                var data = JSON.parse(event.data);
+                console.log(data);
+            }
+
+            var sendAuthMessageMessage = function(token) {
+
+                socket.send(JSON.stringify(
+	        		{
+	        			eventType : "AUTHORIZATION",
+	        			body : { authToken : token }
+	        		}
+	            ));
+            }
+
+            var sendInvalidAuthMessage = function() {
+
+                socket.send(JSON.stringify(
+	        		{
+	        			eventType : "AUTHORIZATION",
+	        			body : { authToken : "invalid" }
+	        		}
+	            ));
+            }
+
+            var sendUnsupportedMessage = function() {
+
+                socket.send(JSON.stringify(
+	        		{
+	        			eventType : "FAIL"
+	        		}
+	            ));
+            }
+
+            var sendChatMessage = function() {
+
+                socket.send(JSON.stringify(
+	        		{
+	        			eventType : "MESSAGE",
+	        			body : {
+	        			    "conversationId" : 1,
+	        			    "message" : "test message"
+	        			}
+	        		}
+	            ));
+            }
+
+	        socket.onmessage = receiveEvent;
+
+        </script>
+
+    </body>
+
+</html>

@@ -1,0 +1,11 @@
+Brief back-end
+=================================
+
+Run back-end :
+
+1. Install Java 8
+2. Install PostgreSQL
+3. Install Play Framework Activator
+4. Create db
+5. Set up system propery DATABASE_URL in format like this : "jdbc:postgresql://localhost:5432/brief?user=postgres&password=postgres"
+4. Run from project directory command activator run

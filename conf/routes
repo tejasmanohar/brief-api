@@ -1,0 +1,77 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET           /swagger                                        @controllers.Application.swagger()
+GET           /ws                                             @controllers.Application.ws
+GET           /api-docs                                       controllers.ApiHelpController.getResources
+
+# API v1
+
+# Authentification API
+GET           /api-docs/api/v1/secure                         controllers.ApiHelpController.getResource(path = "/api/v1/secure")
+POST          /api/v1/secure/candidate/singup                 @controllers.nonsecured.Authentification.singupCandidate
+POST          /api/v1/secure/company/singup                   @controllers.nonsecured.Authentification.singupCompany
+POST          /api/v1/secure/singin                           @controllers.nonsecured.Authentification.singin
+POST          /api/v1/secure/facebook/singin                  @controllers.nonsecured.Authentification.facebookSingIn
+POST          /api/v1/secure/twitter/singin                   @controllers.nonsecured.Authentification.twitterSingIn
+POST          /api/v1/secure/logout                           @controllers.nonsecured.Authentification.logout
+PUT           /api/v1/secure/credentials                      @controllers.nonsecured.Authentification.setUpCredentials
+
+# Users API
+GET           /api-docs/api/v1/users                          controllers.ApiHelpController.getResource(path = "/api/v1/users")
+POST          /api/v1/user/image                              @controllers.secured.User.loadImage
+
+# Companies API
+GET           /api-docs/api/v1/company                        controllers.ApiHelpController.getResource(path = "/api/v1/company")
+GET           /api/v1/companies/:id                           @controllers.secured.Company.show(id: Long)
+GET           /api/v1/companies/employees                     @controllers.secured.Company.employees
+POST          /api/v1/companies/employees/invite              @controllers.secured.Company.inviteEmployer
+GET           /api/v1/companies/jobs                          @controllers.secured.Company.jobs
+DELETE        /api/v1/companies                               @controllers.secured.Company.delete
+
+# Candidates API
+GET           /api-docs/api/v1/candidates                     controllers.ApiHelpController.getResource(path = "/api/v1/candidates")
+GET           /api/v1/candidates                              @controllers.secured.Candidate.showSelf
+GET           /api/v1/candidates/:id                          @controllers.secured.Candidate.show(id: Long)
+PUT           /api/v1/candidates                              @controllers.secured.Candidate.update
+DELETE        /api/v1/candidates                              @controllers.secured.Candidate.delete
+PUT           /api/v1/candidates/skills                       @controllers.secured.Candidate.addSkill
+DELETE        /api/v1/candidates/skills/:name                 @controllers.secured.Candidate.deleteSkill(name : String)
+
+# Employees API
+GET           /api-docs/api/v1/employers                      controllers.ApiHelpController.getResource(path = "/api/v1/employers")
+GET           /api/v1/employees/:id                           @controllers.secured.Employer.show(id: Long)
+
+# Conversations API
+GET           /api-docs/api/v1/conversations                  controllers.ApiHelpController.getResource(path = "/api/v1/conversations")
+GET           /api/v1/conversations                           @controllers.secured.Conversation.list
+GET           /api/v1/conversations/:id                       @controllers.secured.Conversation.show(id: Long)
+PUT           /api/v1/conversation/:id/invite                 @controllers.secured.Conversation.invite(id: Long)
+GET           /api/v1/conversations/:id/messages              @controllers.secured.Conversation.messages(id: Long)
+PUT           /api/v1/conversations/messages/read/:id         @controllers.secured.Conversation.read(id: Long)
+GET           /api-docs/api/v1/conversations/websocket        controllers.ApiHelpController.getResource(path = "/api/v1/conversations/websocket")
+GET           /api/v1/conversation/websocket                  @controllers.nonsecured.WebSocket.connection
+
+# Locations API
+GET           /api-docs/api/v1/location                       controllers.ApiHelpController.getResource(path = "/api/v1/location")
+GET           /api/v1/location/countries                      controllers.nonsecured.Location.countryList
+GET           /api/v1/location/states                         controllers.nonsecured.Location.stateslist
+
+# Skills API
+GET           /api-docs/api/v1/skills                         controllers.ApiHelpController.getResource(path = "/api/v1/skills")
+GET           /api/v1/skills                                  controllers.nonsecured.Skills.list
+
+# Jobs API
+GET           /api-docs/api/v1/jobs                           controllers.ApiHelpController.getResource(path = "/api/v1/jobs")
+POST          /api/v1/jobs                                    @controllers.secured.Job.create
+GET           /api/v1/jobs/:id/applications                   @controllers.secured.Job.getJobApplicants(id: Long)
+PUT           /api/v1/jobs/:id/applications/apply             @controllers.secured.Job.applyToJob(id: Long)
+PUT           /api/v1/jobs/:id/applications/dismiss           @controllers.secured.Job.dismissJob(id: Long)
+PUT           /api/v1/jobs/applications/:id/reject            @controllers.secured.Job.reject(id: Long)
+PUT           /api/v1/jobs/applications/:id/interview         @controllers.secured.Job.interview(id: Long)
+PUT           /api/v1/jobs/applications/:id/hire              @controllers.secured.Job.hire(id: Long)
+GET           /api/v1/jobs                                    @controllers.secured.Job.find(countryCode: String?=null, stateCode: String?= null, cityName: String?=null, experience: Integer?=null, salary: Integer?=null, skills: String?=null)
+# Map static resources from the /public folder to the /assets URL path
+GET           /assets/*file                                   controllers.Assets.at(path="/public", file)

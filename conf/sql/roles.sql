@@ -1,0 +1,3 @@
+INSERT INTO role_model VALUES (1, 'CANDIDATE');
+INSERT INTO role_model VALUES (2, 'COMPANY');
+INSERT INTO role_model VALUES (3, 'EMPLOYER');
